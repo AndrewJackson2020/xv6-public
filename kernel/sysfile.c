@@ -371,6 +371,15 @@ sys_open(void)
 }
 
 uint64
+sys_hello(void)
+{
+  begin_op();
+  printf("Hello, World: from the kernel!\n");
+  end_op();
+  return 0;
+}
+
+uint64
 sys_mkdir(void)
 {
   char path[MAXPATH];

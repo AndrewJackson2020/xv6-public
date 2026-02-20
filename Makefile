@@ -133,6 +133,7 @@ UPROGS=\
 	$U/_init\
 	$U/_kill\
 	$U/_hello\
+	$U/_hello_syscall\
 	$U/_ln\
 	$U/_ls\
 	$U/_mkdir\
