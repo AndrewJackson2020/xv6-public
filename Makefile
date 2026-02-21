@@ -132,6 +132,7 @@ UPROGS=\
 	$U/_grep\
 	$U/_init\
 	$U/_kill\
+	$U/_whoami\
 	$U/_hello\
 	$U/_hello_syscall\
 	$U/_ln\
