@@ -69,7 +69,7 @@ int
 main(int argc, char *argv[])
 {
   int i, cc, fd;
-  uint rootino, inum, off;
+  uint binino, rootino, inum, off;
   struct dirent de;
   char buf[BSIZE];
   struct dinode din;
@@ -125,6 +125,23 @@ main(int argc, char *argv[])
   bzero(&de, sizeof(de));
   de.inum = xshort(rootino);
   strcpy(de.name, "..");
+  iappend(rootino, &de, sizeof(de));
+
+  binino = ialloc(T_DIR);
+
+  bzero(&de, sizeof(de));
+  de.inum = xshort(binino);
+  strcpy(de.name, ".");
+  iappend(binino, &de, sizeof(de));
+
+  bzero(&de, sizeof(de));
+  de.inum = xshort(rootino);
+  strcpy(de.name, "..");
+  iappend(binino, &de, sizeof(de));
+
+  bzero(&de, sizeof(de));
+  de.inum = xshort(binino);
+  strcpy(de.name, "bin");
   iappend(rootino, &de, sizeof(de));
 
   for(i = 2; i < argc; i++){
