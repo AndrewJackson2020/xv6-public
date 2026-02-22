@@ -1,3 +1,4 @@
+
 #include "types.h"
 #include "param.h"
 #include "memlayout.h"
@@ -34,11 +35,16 @@ kexec(char *path, char **argv)
   struct proghdr ph;
   pagetable_t pagetable = 0, oldpagetable;
   struct proc *p = myproc();
+  char fullpath[MAXPATH] = "/bin/";
 
   begin_op();
 
   // Open the executable file.
-  if((ip = namei(path)) == 0){
+  for (i = 0; i < strlen(path); i++) {
+    fullpath[5+i] = path[i];
+  }
+  printf("test %s: ", fullpath);
+  if((ip = namei(fullpath)) == 0){
     end_op();
     return -1;
   }
