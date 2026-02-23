@@ -23,6 +23,11 @@ main(void)
   dup(0);  // stdout
   dup(0);  // stderr
 
+  if(open("hello", O_RDONLY) < 0){
+    mknod("hello", HELLO, 0);
+    open("hello", O_RDONLY);
+  }
+
   for(;;){
     printf("init: starting sh\n");
     pid = fork();

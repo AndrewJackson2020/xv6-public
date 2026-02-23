@@ -17,6 +17,9 @@ void            bwrite(struct buf*);
 void            bpin(struct buf*);
 void            bunpin(struct buf*);
 
+// procfs.c
+void            procfsinit(void);
+
 // console.c
 void            consoleinit(void);
 void            consoleintr(int);

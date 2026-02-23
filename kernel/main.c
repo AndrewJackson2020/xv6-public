@@ -11,6 +11,7 @@ void
 main()
 {
   if(cpuid() == 0){
+    procfsinit();
     consoleinit();
     printfinit();
     printf("\n");
