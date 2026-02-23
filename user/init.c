@@ -16,16 +16,16 @@ main(void)
 {
   int pid, wpid;
 
-  if(open("console", O_RDWR) < 0){
-    mknod("console", CONSOLE, 0);
-    open("console", O_RDWR);
+  if(open("/dev/console", O_RDWR) < 0){
+    mknod("/dev/console", CONSOLE, 0);
+    open("/dev/console", O_RDWR);
   }
   dup(0);  // stdout
   dup(0);  // stderr
 
-  if(open("hello", O_RDONLY) < 0){
-    mknod("hello", HELLO, 0);
-    open("hello", O_RDONLY);
+  if(open("/dev/hello", O_RDONLY) < 0){
+    mknod("/dev/hello", HELLO, 0);
+    open("/dev/hello", O_RDONLY);
   }
 
   for(;;){

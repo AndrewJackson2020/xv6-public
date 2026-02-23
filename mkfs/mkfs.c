@@ -69,7 +69,7 @@ int
 main(int argc, char *argv[])
 {
   int i, cc, fd;
-  uint binino, rootino, inum, off;
+  uint roothomeino, devino, binino, rootino, inum, off;
   struct dirent de;
   char buf[BSIZE];
   struct dinode din;
@@ -142,6 +142,40 @@ main(int argc, char *argv[])
   bzero(&de, sizeof(de));
   de.inum = xshort(binino);
   strcpy(de.name, "bin");
+  iappend(rootino, &de, sizeof(de));
+
+  roothomeino = ialloc(T_DIR);
+
+  bzero(&de, sizeof(de));
+  de.inum = xshort(roothomeino);
+  strcpy(de.name, ".");
+  iappend(roothomeino, &de, sizeof(de));
+
+  bzero(&de, sizeof(de));
+  de.inum = xshort(rootino);
+  strcpy(de.name, "..");
+  iappend(roothomeino, &de, sizeof(de));
+
+  bzero(&de, sizeof(de));
+  de.inum = xshort(roothomeino);
+  strcpy(de.name, "root");
+  iappend(rootino, &de, sizeof(de));
+
+  devino = ialloc(T_DIR);
+
+  bzero(&de, sizeof(de));
+  de.inum = xshort(devino);
+  strcpy(de.name, ".");
+  iappend(devino, &de, sizeof(de));
+
+  bzero(&de, sizeof(de));
+  de.inum = xshort(rootino);
+  strcpy(de.name, "..");
+  iappend(devino, &de, sizeof(de));
+
+  bzero(&de, sizeof(de));
+  de.inum = xshort(devino);
+  strcpy(de.name, "dev");
   iappend(rootino, &de, sizeof(de));
 
   for(i = 2; i < argc; i++){
