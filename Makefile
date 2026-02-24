@@ -137,6 +137,7 @@ UPROGS=\
 	$U/_uptime\
 	$U/_touch\
 	$U/_pingpong\
+	$U/_find\
 	$U/_hello\
 	$U/_sleep\
 	$U/_hello_syscall\
