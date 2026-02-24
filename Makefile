@@ -136,6 +136,7 @@ UPROGS=\
 	$U/_whoami\
 	$U/_uptime\
 	$U/_touch\
+	$U/_pingpong\
 	$U/_hello\
 	$U/_hello_syscall\
 	$U/_ln\
