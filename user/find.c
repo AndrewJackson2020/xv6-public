@@ -6,7 +6,7 @@
 #include "kernel/fs.h"
 #include "kernel/fcntl.h"
 
-int find(char *path, char *exec_command, char *exec_args[]){
+int find(char *path, char *exec_command){
   char buf[512], *p;
   int fd;
   struct dirent de;
@@ -23,6 +23,7 @@ int find(char *path, char *exec_command, char *exec_args[]){
   }
 
   if (exec_command != NULL){
+    char *exec_args[] = {exec_command, path, 0};
     int pid = fork();
     if (pid == 0){
       exec(exec_command, exec_args);
@@ -57,7 +58,7 @@ int find(char *path, char *exec_command, char *exec_args[]){
         continue;
       memmove(p, de.name, DIRSIZ);
       p[DIRSIZ] = 0;
-      find(buf, exec_command, exec_args);
+      find(buf, exec_command);
     }
     break;
   }
@@ -81,14 +82,14 @@ main(int argc, char *argv[])
       exit(1);
     }
 
-    if (find(argv[1], argv[3], &argv[4]) != 0){
+    if (find(argv[1], argv[3]) != 0){
       exit(1);
     }
 
     exit(0);
   }
 
-  if (find(argv[1], NULL, NULL) != 0){
+  if (find(argv[1], NULL) != 0){
     exit(1);
   }
   exit(0);
