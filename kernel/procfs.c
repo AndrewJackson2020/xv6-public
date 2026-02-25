@@ -27,18 +27,7 @@ helloread(int user_dst, uint64 dst, int n)
   char cbuf;
   int c;
 
-  helloproc.buf[0] = 'h';
-  helloproc.buf[1] = 'e';
-  helloproc.buf[2] = 'l';
-  helloproc.buf[3] = 'l';
-  helloproc.buf[4] = 'o';
-  helloproc.buf[5] = ' ';
-  helloproc.buf[6] = 'w';
-  helloproc.buf[7] = 'o';
-  helloproc.buf[8] = 'r';
-  helloproc.buf[9] = 'l';
-  helloproc.buf[10] = 'd';
-  helloproc.buf[11] = '\n';
+  memmove(helloproc.buf, "hello world\n", HELLO_PROC_FILE_SIZE);
 
   target = n;
   while(n > 0){
