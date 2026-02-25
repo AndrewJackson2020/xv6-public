@@ -1,11 +1,12 @@
 
+#include <stddef.h>
 #include "kernel/types.h"
 #include "kernel/stat.h"
 #include "user/user.h"
 #include "kernel/fs.h"
 #include "kernel/fcntl.h"
 
-int find(char *path){
+int find(char *path, char *exec_command, char *exec_args[]){
   char buf[512], *p;
   int fd;
   struct dirent de;
@@ -21,7 +22,18 @@ int find(char *path){
     return 1;
   }
 
-  printf("%s\n", path);
+  if (exec_command != NULL){
+    int pid = fork();
+    if (pid == 0){
+      exec(exec_command, exec_args);
+      exit(0);
+    } else {
+      wait(0);
+    }
+  } else {
+    printf("%s\n", path);
+  }
+
   switch(st.type){
   case T_DEVICE:
   case T_FILE:
@@ -45,7 +57,7 @@ int find(char *path){
         continue;
       memmove(p, de.name, DIRSIZ);
       p[DIRSIZ] = 0;
-      find(buf);
+      find(buf, exec_command, exec_args);
     }
     break;
   }
@@ -56,11 +68,27 @@ int find(char *path){
 int
 main(int argc, char *argv[])
 {
+  char usage_message[] = "usage: find [path] -exec [command] \n";
   if(argc <= 1){
-    fprintf(2, "usage: find [path]\n");
+    fprintf(2, usage_message);
     exit(1);
   }
-  if (find(argv[1]) != 0){
+
+  // Is exec passed?
+  if(argc >= 3){
+    if ((strcmp(argv[2], "-exec") != 0) || (strlen(argv[2]) != strlen("-exec"))){
+      fprintf(2, usage_message);
+      exit(1);
+    }
+
+    if (find(argv[1], argv[3], &argv[4]) != 0){
+      exit(1);
+    }
+
+    exit(0);
+  }
+
+  if (find(argv[1], NULL, NULL) != 0){
     exit(1);
   }
   exit(0);
