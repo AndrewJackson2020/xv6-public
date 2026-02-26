@@ -8,6 +8,7 @@ main(int argc, char *argv[])
 {
   int start_uptime;
   int end_uptime;
+  int ticks;
   int total_time;
 
   start_uptime = uptime();
@@ -20,8 +21,9 @@ main(int argc, char *argv[])
   }
 
   end_uptime = uptime();
-  total_time = (end_uptime - start_uptime) / 10;
-  printf("%d total\n", total_time);
+  ticks = end_uptime - start_uptime;
+  total_time = ticks * 100 / 10;
+  printf("%d.%d seconds total\n", total_time / 100 , total_time % 100);
   exit(0);
 }
 
