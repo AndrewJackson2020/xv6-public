@@ -109,3 +109,13 @@ def test_find() -> None:
     assert '/bin/hello' in lines
     assert '/bin/wc' in lines
     q.stop()
+
+
+def test_time() -> None:
+    q = util.QEMU(True)
+    q.cmd("time sleep 1\n")
+    time.sleep(2)
+    q.read()
+    lines = q.lines()
+    assert " total" in lines[-2]
+    q.stop()

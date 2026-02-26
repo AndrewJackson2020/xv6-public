@@ -138,6 +138,7 @@ UPROGS=\
 	$U/_touch\
 	$U/_pingpong\
 	$U/_find\
+	$U/_time\
 	$U/_hello\
 	$U/_sleep\
 	$U/_hello_syscall\
