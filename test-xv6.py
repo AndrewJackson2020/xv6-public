@@ -46,7 +46,7 @@ class QEMU(object):
     def save_output(self):
       try:
         with open("test-xv6.out", "w") as f:
-            f.write(self.out)
+            f.write(self.output)
             f.close()
       except OSError as e:
         print("Provided a bad results path. Error:", e)     
@@ -77,7 +77,7 @@ class QEMU(object):
     def lines(self):
         return self.output.splitlines()
 
-    def error(self):
+    def error(self, regexps):
         print("FAIL: match failed", regexps)
         self.save_output()
         self.stop()
@@ -91,7 +91,7 @@ class QEMU(object):
                 print(line)
                 last = i
         if last == -1 and exit:
-            self.error()
+            self.error(regexps)
         l = ""
         if last >= 0:
             l = lines[last]
@@ -103,7 +103,7 @@ class QEMU(object):
             time.sleep(1)
             timeleft = deadline - time.time()
             if timeleft < 0:
-                self.error()
+                self.error(regexps)
             self.read()
             ok, _ = self.match(*regexps, exit=False)
             if ok:
@@ -137,7 +137,7 @@ def forphan():
     q.cmd("forphan\n")
     time.sleep(5)
     q.read()
-    q.match('wait')
+    q.match('.*wait.*')
     q.crash()
     q.stop()
 
@@ -146,7 +146,7 @@ def dorphan():
     q.cmd("dorphan\n")
     time.sleep(5)
     q.read()
-    q.match('wait')
+    q.match('.*wait.*')
     q.crash()
     q.stop()
 
