@@ -1,0 +1,111 @@
+
+import sys, time
+import util
+
+
+def crash_log() -> None:
+    q = util.QEMU(True)
+    q.cmd("logstress f0 f1 f2 f3 f4 f5\n")
+    time.sleep(2)
+    q.crash()
+    q.stop()
+
+
+def recover_log() -> None:
+    q = util.QEMU()
+    time.sleep(2)
+    q.read()
+    ok, _ = q.match('^recovering', exit=False)
+    if ok:
+        q.cmd("ls\n")
+        time.sleep(2)
+        q.read()
+        q.match('f5')
+    q.stop()
+    return ok
+
+
+def forphan() -> None:
+    q = util.QEMU(True)
+    q.cmd("forphan\n")
+    time.sleep(5)
+    q.read()
+    q.match('.*wait.*')
+    q.crash()
+    q.stop()
+
+
+def dorphan() -> None:
+    q = util.QEMU(True)
+    q.cmd("dorphan\n")
+    time.sleep(5)
+    q.read()
+    q.match('.*wait.*')
+    q.crash()
+    q.stop()
+
+
+def recover_orphan() -> None:
+    q = util.QEMU()
+    time.sleep(2)
+    q.read()
+    q.match('^ireclaim')
+    q.stop()
+
+
+def test_log() -> None:
+    print("Test recovery of log")
+    for i in range(5):
+        crash_log()
+        ok = recover_log()
+        if ok:
+            print("OK")
+            return
+        print("log attempt ", i+1)
+    print("FAIL")
+    sys.exit(1)
+    
+
+def test_forphan() -> None:
+    forphan()
+    recover_orphan()
+
+
+def test_dorphan() -> None:
+    dorphan()
+    recover_orphan()
+
+
+def test_crash() -> None:
+    test_log()
+    test_forphan()
+    test_dorphan()
+
+
+def test_usertests() -> None:
+    timeout = 600
+    q = util.QEMU(True)
+    q.cmd("usertests\n")
+    q.monitor('^ALL TESTS PASSED', progress='test', timeout=timeout)
+    q.stop()
+
+
+def test_hello() -> None:
+    q = util.QEMU(True)
+    q.cmd("hello\n")
+    time.sleep(1)
+    q.read()
+    lines = q.lines()
+    assert 'test /bin/hello: Hello, World!' in lines
+    q.stop()
+
+
+def test_find() -> None:
+    q = util.QEMU(True)
+    q.cmd("find /bin/\n")
+    time.sleep(1)
+    q.read()
+    lines = q.lines()
+    assert '/bin/hello' in lines
+    assert '/bin/wc' in lines
+    q.stop()
