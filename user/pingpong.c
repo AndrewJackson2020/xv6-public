@@ -1,13 +1,21 @@
 
+#include <stddef.h>
 #include "kernel/types.h"
 #include "kernel/stat.h"
 #include "user/user.h"
 
 int
-main(void)
+main(int argc, char *argv[])
 {
   int pipe_child_to_parent[2];
   int pipe_parent_to_child[2];
+
+  int max_iter = -1;
+  int current_iter = 0;
+
+  if (argc == 2){
+    max_iter = atoi(argv[1]);
+  }
 
   if (pipe(pipe_child_to_parent) > 0){
     printf("pingpong: pipe failed\n");
@@ -42,6 +50,12 @@ main(void)
       }
       gets2(pong_from_child, sizeof(pong_from_child) + 1, pipe_child_to_parent[0]);
       printf("%s\n", pong_from_child);
+      current_iter++;
+      if (max_iter > -1){
+          if (current_iter == max_iter){
+            exit(0);
+          }
+      }
     }
   }
 }

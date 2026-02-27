@@ -130,3 +130,13 @@ def test_pingpong() -> None:
     assert "pingpong" in lines[-1]
     assert "pingpong" in lines[-2]
     q.stop()
+
+
+def test_pingpong_max_iter() -> None:
+    q = util.QEMU(True)
+    q.cmd("pingpong 100\n")
+    time.sleep(2)
+    q.read()
+    lines = q.lines()
+    assert len([line for line in lines if line == 'pingpong']) == 99
+    q.stop()
