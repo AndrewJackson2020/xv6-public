@@ -119,3 +119,14 @@ def test_time() -> None:
     lines = q.lines()
     assert " total" in lines[-2]
     q.stop()
+
+
+def test_pingpong() -> None:
+    q = util.QEMU(True)
+    q.cmd("pingpong\n")
+    time.sleep(2)
+    q.read()
+    lines = q.lines()
+    assert "pingpong" in lines[-1]
+    assert "pingpong" in lines[-2]
+    q.stop()
