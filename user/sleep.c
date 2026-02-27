@@ -6,8 +6,6 @@ int
 main(int argc, char *argv[])
 {
   int sleep_time;
-  int start_uptime;
-  int current_uptime;
 
   if(argc <= 1){
     fprintf(2, "usage: sleep [time_seconds]\n");
@@ -15,13 +13,7 @@ main(int argc, char *argv[])
   }
   sleep_time = atoi(argv[1]);
 
-  start_uptime = uptime();
-  for (;;){
-    current_uptime = uptime();
-    if ((current_uptime - start_uptime) / 10 > sleep_time){
-      break;
-    }
-  }
+  pause(sleep_time * 10);
 
   printf("\n");
   exit(0);
