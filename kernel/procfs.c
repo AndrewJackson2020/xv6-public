@@ -27,7 +27,7 @@ helloread(int user_dst, uint64 dst, int n)
   char cbuf;
   int c;
 
-  memmove(helloproc.buf, "hello world\n", HELLO_PROC_FILE_SIZE);
+  sprintf(helloproc.buf, "hello %s\n", "world");
 
   target = n;
   while(n > 0){

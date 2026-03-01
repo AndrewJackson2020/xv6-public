@@ -7,6 +7,7 @@ OBJS = \
   $K/console.o \
   $K/procfs.o \
   $K/printf.o \
+  $K/sprintf.o \
   $K/uart.o \
   $K/kalloc.o \
   $K/spinlock.o \
