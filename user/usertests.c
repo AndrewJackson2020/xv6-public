@@ -27,6 +27,17 @@ char buf[BUFSZ];
 // fair amount of time.
 //
 
+void
+sprintf_test(char *s)
+{
+  char buf[12];
+
+  sprintf(buf, "hello %s", "world");
+  if (strcmp(buf, "hello world") != 0){
+    exit(1);
+  }
+}
+
 // what if you pass ridiculous pointers to system calls
 // that read user memory with copyin?
 void
@@ -2752,6 +2763,7 @@ struct test {
   void (*f)(char *);
   char *s;
 } quicktests[] = {
+  {sprintf_test, "sprintf_test"},
   {copyin, "copyin"},
   {copyout, "copyout"},
   {copyinstr1, "copyinstr1"},

@@ -42,6 +42,9 @@ void *memcpy(void *, const void *, uint);
 char* sbrk(int);
 char* sbrklazy(int);
 
+// sprintf.c
+void sprintf(char *buf, const char *fmt, ...) __attribute__ ((format (printf, 2, 3)));
+
 // printf.c
 void fprintf(int, const char*, ...) __attribute__ ((format (printf, 2, 3)));
 void printf(const char*, ...) __attribute__ ((format (printf, 1, 2)));
