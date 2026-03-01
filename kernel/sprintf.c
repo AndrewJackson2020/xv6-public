@@ -6,7 +6,7 @@
 
 static char digits[] = "0123456789ABCDEF";
 
-static void
+char *
 sprintint(char *p, long long xx, int base, int sgn)
 {
   char buf[20];
@@ -30,15 +30,19 @@ sprintint(char *p, long long xx, int base, int sgn)
 
   while(--i >= 0)
     *p++ = buf[i];
+
+  return p;
 }
 
-static void
+char *
 sprintptr(char *p, uint64 x) {
   int i;
   *p++ = '0';
   *p++ = 'x';
   for (i = 0; i < (sizeof(uint64) * 2); i++, x <<= 4)
     *p++ = digits[x >> (sizeof(uint64) * 8 - 4)];
+
+  return p;
 }
 
 // Only understands %d, %x, %p, %c, %s.
@@ -66,31 +70,31 @@ sprintf(char *buf, const char *fmt, ...)
       if(c0) c1 = fmt[i+1] & 0xff;
       if(c1) c2 = fmt[i+2] & 0xff;
       if(c0 == 'd'){
-        sprintint(p, va_arg(ap, int), 10, 1);
+        p = sprintint(p, va_arg(ap, int), 10, 1);
       } else if(c0 == 'l' && c1 == 'd'){
-        sprintint(p, va_arg(ap, uint64), 10, 1);
+        p = sprintint(p, va_arg(ap, uint64), 10, 1);
         i += 1;
       } else if(c0 == 'l' && c1 == 'l' && c2 == 'd'){
-        sprintint(p, va_arg(ap, uint64), 10, 1);
+        p = sprintint(p, va_arg(ap, uint64), 10, 1);
         i += 2;
       } else if(c0 == 'u'){
-        sprintint(p, va_arg(ap, uint32), 10, 0);
+        p = sprintint(p, va_arg(ap, uint32), 10, 0);
       } else if(c0 == 'l' && c1 == 'u'){
-        sprintint(p, va_arg(ap, uint64), 10, 0);
+        p = sprintint(p, va_arg(ap, uint64), 10, 0);
         i += 1;
       } else if(c0 == 'l' && c1 == 'l' && c2 == 'u'){
-        sprintint(p, va_arg(ap, uint64), 10, 0);
+        p = sprintint(p, va_arg(ap, uint64), 10, 0);
         i += 2;
       } else if(c0 == 'x'){
-        sprintint(p, va_arg(ap, uint32), 16, 0);
+        p = sprintint(p, va_arg(ap, uint32), 16, 0);
       } else if(c0 == 'l' && c1 == 'x'){
-        sprintint(p, va_arg(ap, uint64), 16, 0);
+        p = sprintint(p, va_arg(ap, uint64), 16, 0);
         i += 1;
       } else if(c0 == 'l' && c1 == 'l' && c2 == 'x'){
-        sprintint(p, va_arg(ap, uint64), 16, 0);
+        p = sprintint(p, va_arg(ap, uint64), 16, 0);
         i += 2;
       } else if(c0 == 'p'){
-        sprintptr(p, va_arg(ap, uint64));
+        p = sprintptr(p, va_arg(ap, uint64));
       } else if(c0 == 'c'){
         *p++ = va_arg(ap, uint32);
       } else if(c0 == 's'){
@@ -110,3 +114,4 @@ sprintf(char *buf, const char *fmt, ...)
     }
   }
 }
+

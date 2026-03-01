@@ -59,6 +59,7 @@ void            itrunc(struct inode*);
 void            ireclaim(int);
 
 // kalloc.c
+int             getfreepages(void);
 void*           kalloc(void);
 void            kfree(void *);
 void            kinit(void);

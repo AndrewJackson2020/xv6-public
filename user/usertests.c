@@ -49,6 +49,17 @@ sprintf_integer(char *s)
   }
 }
 
+void
+sprintf_integer_newline(char *s)
+{
+  char buf[13];
+
+  sprintf(buf, "hello %d\n", 12345);
+  if (strcmp(buf, "hello 12345\n") != 0){
+    exit(1);
+  }
+}
+
 // what if you pass ridiculous pointers to system calls
 // that read user memory with copyin?
 void
@@ -2776,6 +2787,7 @@ struct test {
 } quicktests[] = {
   {sprintf_string, "sprintf_string"},
   {sprintf_integer, "sprintf_integer"},
+  {sprintf_integer_newline, "sprintf_integer_newline"},
   {copyin, "copyin"},
   {copyout, "copyout"},
   {copyinstr1, "copyinstr1"},

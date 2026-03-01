@@ -140,3 +140,14 @@ def test_pingpong_max_iter() -> None:
     lines = q.lines()
     assert len([line for line in lines if line == 'pingpong']) == 99
     q.stop()
+
+
+def test_meminfo() -> None:
+    q = util.QEMU(True)
+    q.cmd("cat /dev/meminfo\n")
+    time.sleep(2)
+    q.read()
+    lines = q.lines()
+    assert "FreePages: " in lines[-3]
+    assert "MemFree: " in lines[-2]
+    q.stop()

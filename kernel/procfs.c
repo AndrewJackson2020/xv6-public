@@ -14,7 +14,7 @@
 
 
 struct {
-#define MEMINFO_PROC_FILE_SIZE 12
+#define MEMINFO_PROC_FILE_SIZE 200
   char buf[MEMINFO_PROC_FILE_SIZE];
   uint r;  // Read index
 } meminfoproc;
@@ -26,12 +26,13 @@ meminforead(int user_dst, uint64 dst, int n)
   uint target;
   char cbuf;
   int c;
-
-  sprintf(meminfoproc.buf, "hello %s\n", "world");
+  int freepages;
+  freepages = getfreepages();
+  sprintf(meminfoproc.buf, "FreePages: %d\nMemFree: %d kB\n", freepages, freepages * PGSIZE / 1024);
 
   target = n;
   while(n > 0){
-    if (meminfoproc.r == MEMINFO_PROC_FILE_SIZE){
+    if (meminfoproc.r == (strlen(meminfoproc.buf))){
       meminfoproc.r = 0;
       break;
     };
