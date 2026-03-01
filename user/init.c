@@ -23,9 +23,9 @@ main(void)
   dup(0);  // stdout
   dup(0);  // stderr
 
-  if(open("/dev/hello", O_RDONLY) < 0){
-    mknod("/dev/hello", HELLO, 0);
-    open("/dev/hello", O_RDONLY);
+  if(open("/dev/meminfo", O_RDONLY) < 0){
+    mknod("/dev/meminfo", MEMINFO, 0);
+    open("/dev/meminfo", O_RDONLY);
   }
 
   for(;;){

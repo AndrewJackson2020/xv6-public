@@ -14,29 +14,29 @@
 
 
 struct {
-#define HELLO_PROC_FILE_SIZE 12
-  char buf[HELLO_PROC_FILE_SIZE];
+#define MEMINFO_PROC_FILE_SIZE 12
+  char buf[MEMINFO_PROC_FILE_SIZE];
   uint r;  // Read index
-} helloproc;
+} meminfoproc;
 
 
 int
-helloread(int user_dst, uint64 dst, int n)
+meminforead(int user_dst, uint64 dst, int n)
 {
   uint target;
   char cbuf;
   int c;
 
-  sprintf(helloproc.buf, "hello %s\n", "world");
+  sprintf(meminfoproc.buf, "hello %s\n", "world");
 
   target = n;
   while(n > 0){
-    if (helloproc.r == HELLO_PROC_FILE_SIZE){
-      helloproc.r = 0;
+    if (meminfoproc.r == MEMINFO_PROC_FILE_SIZE){
+      meminfoproc.r = 0;
       break;
     };
-    c = helloproc.buf[helloproc.r];
-    helloproc.r = helloproc.r + 1;
+    c = meminfoproc.buf[meminfoproc.r];
+    meminfoproc.r = meminfoproc.r + 1;
     cbuf = c;
     if(either_copyout(user_dst, dst, &cbuf, 1) == -1)
       break;
@@ -56,7 +56,7 @@ helloread(int user_dst, uint64 dst, int n)
 }
 
 int
-hellowrite(int user_src, uint64 src, int n)
+meminfowrite(int user_src, uint64 src, int n)
 {
   // char buf[32]; // move batches from user space to uart.
   // int i = 0;
@@ -76,6 +76,6 @@ hellowrite(int user_src, uint64 src, int n)
 void
 procfsinit(void)
 {
-  devsw[HELLO].read = helloread;
-  devsw[HELLO].write = hellowrite;
+  devsw[MEMINFO].read = meminforead;
+  devsw[MEMINFO].write = meminfowrite;
 }

@@ -37,5 +37,5 @@ struct devsw {
 
 extern struct devsw devsw[];
 
-#define CONSOLE 1
-#define HELLO   2
+#define CONSOLE   1
+#define MEMINFO   2
