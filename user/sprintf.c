@@ -41,6 +41,7 @@ sprintptr(char *p, uint64 x) {
     *p++ = digits[x >> (sizeof(uint64) * 8 - 4)];
 }
 
+// Only understands %d, %x, %p, %c, %s.
 void
 sprintf(char *buf, const char *fmt, ...)
 {

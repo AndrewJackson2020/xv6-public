@@ -28,12 +28,23 @@ char buf[BUFSZ];
 //
 
 void
-sprintf_test(char *s)
+sprintf_string(char *s)
 {
   char buf[12];
 
   sprintf(buf, "hello %s", "world");
   if (strcmp(buf, "hello world") != 0){
+    exit(1);
+  }
+}
+
+void
+sprintf_integer(char *s)
+{
+  char buf[12];
+
+  sprintf(buf, "hello %d", 12345);
+  if (strcmp(buf, "hello 12345") != 0){
     exit(1);
   }
 }
@@ -2763,7 +2774,8 @@ struct test {
   void (*f)(char *);
   char *s;
 } quicktests[] = {
-  {sprintf_test, "sprintf_test"},
+  {sprintf_string, "sprintf_string"},
+  {sprintf_integer, "sprintf_integer"},
   {copyin, "copyin"},
   {copyout, "copyout"},
   {copyinstr1, "copyinstr1"},
