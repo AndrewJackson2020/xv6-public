@@ -300,6 +300,22 @@ gettoken(char **ps, char *es, char **q, char **eq)
       s++;
     }
     break;
+  case '$':
+    s++;
+
+    if (strncmp(s, "PID", 3) != 0){
+      break;
+    }
+    ret = 'a';
+
+    s++;
+    s++;
+    s++;
+
+    char pid[20];
+    sprintf(pid, "%d", getpid());
+    safestrcpy(*q, pid, strlen(pid));
+    break;
   default:
     ret = 'a';
     while(s < es && !strchr(whitespace, *s) && !strchr(symbols, *s))
