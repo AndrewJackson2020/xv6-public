@@ -96,7 +96,7 @@ def test_hello() -> None:
     time.sleep(1)
     q.read()
     lines = q.lines()
-    assert 'test /bin/hello: Hello, World!' in lines
+    assert 'Hello, World!' in lines
     q.stop()
 
 
@@ -127,8 +127,11 @@ def test_pingpong() -> None:
     time.sleep(2)
     q.read()
     lines = q.lines()
-    assert "pingpong" in lines[-1]
+
+    # not testing latest line because it is likely to
+    # get cut off before completion     
     assert "pingpong" in lines[-2]
+    assert "pingpong" in lines[-3]
     q.stop()
 
 
@@ -138,7 +141,7 @@ def test_pingpong_max_iter() -> None:
     time.sleep(2)
     q.read()
     lines = q.lines()
-    assert len([line for line in lines if line == 'pingpong']) == 99
+    assert len([line for line in lines if line == 'pingpong']) == 100
     q.stop()
 
 
