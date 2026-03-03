@@ -151,3 +151,16 @@ def test_meminfo() -> None:
     assert "FreePages: " in lines[-3]
     assert "MemFree: " in lines[-2]
     q.stop()
+
+
+def test_append() -> None:
+    q = util.QEMU(True)
+    q.cmd("echo hello > testfile\n")
+    q.cmd("echo world >> testfile\n")
+    q.cmd("cat testfile\n")
+    time.sleep(2)
+    q.read()
+    lines = q.lines()
+    assert "hello" in lines[-3]
+    assert "world" in lines[-2]
+    q.stop()
