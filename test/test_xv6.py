@@ -86,6 +86,9 @@ def test_crash() -> None:
 @pytest.mark.parametrize(
   "test_name", 
   [
+    "test_lseek_set",
+    "test_lseek_cur",
+    "test_lseek_end",
     "sprintf_string",
     "sprintf_integer",
     "sprintf_integer_newline",
