@@ -1,6 +1,7 @@
 
 import sys, time
 import util
+import pytest
 
 
 def crash_log() -> None:
@@ -82,10 +83,41 @@ def test_crash() -> None:
     test_dorphan()
 
 
-def test_usertests() -> None:
+@pytest.mark.parametrize(
+  "test_name", 
+  [
+    "sprintf_string",
+    "sprintf_integer",
+    "sprintf_integer_newline",
+    "copyin",
+    "copyout",
+    "copyinstr1",
+    "copyinstr2",
+    "copyinstr3",
+    "rwsbrk" ,
+    "truncate1",
+    "truncate2",
+    "truncate3",
+    "openiput",
+    "exitiput",
+    "iput",
+    "opentest",
+    "writetest",
+    "writebig",
+    "createtest",
+    "dirtest",
+    "exectest",
+    "pipe1",
+    "killstatus",
+    "preempt",
+    "exitwait",
+    "reparent" ,
+  ],
+)
+def test_usertests(test_name: str) -> None:
     timeout = 600
     q = util.QEMU(True)
-    q.cmd("usertests\n")
+    q.cmd(f"usertests {test_name}\n")
     q.monitor('^ALL TESTS PASSED', progress='test', timeout=timeout)
     q.stop()
 
