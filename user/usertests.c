@@ -2,7 +2,10 @@
 #include "kernel/types.h"
 #include "kernel/stat.h"
 #include "user/user.h"
+#include "kernel/spinlock.h"
+#include "kernel/sleeplock.h"
 #include "kernel/fs.h"
+#include "kernel/file.h"
 #include "kernel/fcntl.h"
 #include "kernel/syscall.h"
 #include "kernel/memlayout.h"
@@ -56,6 +59,87 @@ sprintf_integer_newline(char *s)
 
   sprintf(buf, "hello %d\n", 12345);
   if (strcmp(buf, "hello 12345\n") != 0){
+    exit(1);
+  }
+}
+
+void
+test_lseek_set(char *s)
+{
+  char writebuf[2] = "ab";
+  char readbuf[3];
+
+  int fd = open("test_lseek_set", O_CREATE);
+
+  lseek(fd, 1, SEEK_SET);
+  int n = write(fd, (void*)writebuf, 2);
+  if(n > 0){
+    printf("error write");
+    exit(1);
+  }
+
+  lseek(fd, 0, SEEK_SET);
+  n = read(fd, (void*)readbuf, 4);
+  if(n > 0){
+    printf("error read");
+    exit(1);
+  }
+
+  if (strcmp(readbuf, "0ab") != 0){
+    exit(1);
+  }
+  
+}
+
+void
+test_lseek_cur(char *s)
+{
+  char writebuf[2] = "ab";
+  char readbuf[3];
+
+  int fd = open("test_lseek_cur", O_CREATE);
+
+  lseek(fd, 1, SEEK_CUR);
+  int n = write(fd, (void*)writebuf, 2);
+  if(n > 0){
+    printf("error write");
+    exit(1);
+  }
+
+  lseek(fd, 0, SEEK_SET);
+  n = read(fd, (void*)readbuf, 4);
+  if(n > 0){
+    printf("error read");
+    exit(1);
+  }
+
+  if (strcmp(readbuf, "0ab") != 0){
+    exit(1);
+  }
+}
+
+void
+test_lseek_end(char *s)
+{
+  char writebuf1[4] = "aaaa";
+  char writebuf2[2] = "bb";
+  char readbuf[4];
+
+  int fd = open("test_lseek_end", O_CREATE);
+  int n = write(fd, (void*)writebuf1, 4);
+  if(n > 0){
+    printf("error write");
+    exit(1);
+  }
+
+  lseek(fd, 3, SEEK_END);
+  n = read(fd, (void*)writebuf2, 2);
+  if(n > 0){
+    printf("error read");
+    exit(1);
+  }
+
+  if (strcmp(readbuf, "abba") != 0){
     exit(1);
   }
 }
@@ -2788,6 +2872,9 @@ struct test {
   {sprintf_string, "sprintf_string"},
   {sprintf_integer, "sprintf_integer"},
   {sprintf_integer_newline, "sprintf_integer_newline"},
+  {test_lseek_set, "test_lseek_set"},
+  {test_lseek_cur, "test_lseek_cur"},
+  {test_lseek_end, "test_lseek_end"},
   {copyin, "copyin"},
   {copyout, "copyout"},
   {copyinstr1, "copyinstr1"},

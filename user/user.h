@@ -43,6 +43,7 @@ int memcmp(const void *, const void *, uint);
 void *memcpy(void *, const void *, uint);
 char* sbrk(int);
 char* sbrklazy(int);
+int lseek(int fd, int off, int whence);
 
 // sprintf.c
 void sprintf(char *buf, const char *fmt, ...) __attribute__ ((format (printf, 2, 3)));

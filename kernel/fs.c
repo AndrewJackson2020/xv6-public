@@ -531,10 +531,22 @@ writei(struct inode *ip, int user_src, uint64 src, uint off, uint n)
   uint tot, m;
   struct buf *bp;
 
-  if(off > ip->size || off + n < off)
+
+  if (off + n < off)
     return -1;
+
   if(off + n > MAXFILE*BSIZE)
     return -1;
+
+  while (off > ip->size){
+    bp = bread(ip->dev, ip->size);
+    if(either_copyin(bp->data, '0', ip->size, 1) == -1) {
+      brelse(bp);
+      break;
+    }
+
+    ip->size += 1;
+  }
 
   for(tot=0; tot<n; tot+=m, off+=m, src+=m){
     uint addr = bmap(ip, off/BSIZE);

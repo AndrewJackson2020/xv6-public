@@ -28,7 +28,6 @@ struct inode {
   uint size;
   uint addrs[NDIRECT+1];
 };
-
 // map major device number to device functions.
 struct devsw {
   int (*read)(int, uint64, int);
@@ -39,3 +38,7 @@ extern struct devsw devsw[];
 
 #define CONSOLE   1
 #define MEMINFO   2
+
+#define SEEK_SET  1
+#define SEEK_CUR  2
+#define SEEK_END  3

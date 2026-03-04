@@ -302,6 +302,35 @@ create(char *path, short type, short major, short minor)
 }
 
 uint64
+sys_lseek(void)
+{
+  struct file *f;
+  int off; 
+  int whence;
+
+  argint(1, &off);
+  argint(2, &whence);
+
+  if(argfd(0, 0, &f) < 0){
+    printf("lseek: invalid fd provided\n");
+    return -1;
+  }
+
+  if (off < 0){
+    printf("lseek: invalid off provided\n");
+    return 1;
+  }
+
+  if ((whence > 3) || (whence < 0)){
+    printf("lseek: invalid whence provided\n");
+    return 1;
+  }
+
+  filelseek(f, off, whence);
+  return 0;
+}
+
+uint64
 sys_open(void)
 {
   char path[MAXPATH];

@@ -129,6 +129,28 @@ fileread(struct file *f, uint64 addr, int n)
   return r;
 }
 
+int filelseek(struct file *f, int off, int whence){
+  if(f->type == FD_PIPE){
+    printf("filelseek: FD_PIPE not supported\n");
+    return -1;
+  } else if (f->type == FD_DEVICE){
+    printf("filelseek: FD_DEVICE not supported\n");
+    return -1;
+  } else if(f->type == FD_INODE){
+    if (whence == SEEK_SET) {
+      f->off = off;
+    } else if (whence == SEEK_CUR) {
+      f->off += off;
+    } else if (whence == SEEK_END) {
+      f->off += f->ip->size - off;
+    } else {
+      printf("filelseek: invalid whence provided\n");
+      return -1;
+    }
+  }
+  return 0;
+}
+
 // Write to file f.
 // addr is a user virtual address.
 int
